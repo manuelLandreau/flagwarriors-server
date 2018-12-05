@@ -1,0 +1,38 @@
+{
+  "name": "flagwarrior",
+  "language": "en",
+  "version": "0.1.0",
+  "description": "flagwarrior",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "node dist/app.js",
+    "dev": "nodemon src/app.js ",
+    "build": "babel --presets es2015 --minified --comments=false src --source-maps --out-dir dist"
+  },
+  "engines": {
+    "node": "7.1.0",
+    "npm": "3.9.3"
+  },
+  "author": "Manuel Landreau",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.3.8",
+    "socket.io": "^2.1.1"
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
+    }
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2"
+  }
+}
