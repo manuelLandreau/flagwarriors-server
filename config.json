@@ -1,5 +1,0 @@
-{
-  "DB_HOST": "mongodb://127.0.0.1/",
-  "DB_COLLECTION": "users",
-  "SECRET": "4DIZH86Z4GLH647HF5S"
-}

@@ -2,9 +2,6 @@
 const Express = require('express')
 const Http = require('http')
 const SocketIO = require('socket.io')
-const BodyParser = require('body-parser')
-const Cors = require('cors')
-// const MainRouter = require('./MainRouter');
 
 const app = Express()
 
@@ -17,22 +14,43 @@ server.listen(port, () => {
   console.log(`App listening at http://${address}:${port}`)
 })
 
-app.use(Cors())
-app.use(BodyParser.urlencoded({extended: true}))
-app.use(BodyParser.json())
-
-// First routing steps
-// app.use(MainRouter);
-
 // Socket.io
 const io = SocketIO(server)
+
 let gameId = 0
 let flag = true
+const games = []
 
-io.on('connection', (socket) => {
+io.on('connection', socket => {
   console.log(socket.id)
 
-  socket.on('avalable_player', (player) => {
+  // Create game systemq
+  socket.on('created_game', gameName => {
+    if (games[gameName] === undefined) {
+      games[gameName] = true
+      console.log('waiting for a game')
+      socket.join(gameName)
+      socket.emit('game_id', {for: socket.id, gameId: gameName, gameOn: false})
+    } else {
+      socket.emit('game_exists', {for: socket.id});
+    }
+    console.log(games)
+  })
+
+  // Join game system
+  socket.on('join_game', gameName => {
+    if (games[gameName]) {
+      delete games[gameName]
+      console.log('game on !')
+      socket.join(gameName)
+      socket.emit('game_id', {for: socket.id, gameId: gameName, gameOn: true})
+      socket.broadcast.to(gameName).emit('game_on')
+    } else {
+      socket.emit('game_not_exists', {for: socket.id});
+    }
+  })
+
+  socket.on('avalable_player', () => {
     if (flag) {
       console.log('waiting for a game')
       socket.join(gameId)
@@ -48,6 +66,7 @@ io.on('connection', (socket) => {
     }
   })
 
+  // Chat system
   socket.on('ally_message', ({gameId, message}) => socket.to(gameId).emit('ennemy_message', message))
 
   socket.on('ready', data => socket.broadcast.to(data.gameId).emit('ready', data))
@@ -68,10 +87,8 @@ io.on('connection', (socket) => {
 
   socket.on('death', data => socket.broadcast.to(data.gameId).emit('death', data))
 
-  // when the user disconnects.. perform this
   socket.on('disconnect', () => {
     // socket.broadcast.to(data.gameId).emit('disconnect');
   })
 })
 
-// module.exports = app;

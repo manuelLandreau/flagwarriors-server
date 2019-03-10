@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js ",
-    "build": "babel --presets es2015 --minified --comments=false src --source-maps --out-dir dist"
+    "build": ""
   },
   "engines": {
     "node": "10.13.0",
@@ -15,15 +15,11 @@
   "author": "Manuel Landreau",
   "license": "Apache",
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "cors": "^2.8.5",
     "express": "^4.16.4",
     "nodemon": "^1.18.10",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.4"
   },
   "buildpacks": [
     {
